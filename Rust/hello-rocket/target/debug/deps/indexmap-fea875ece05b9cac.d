@@ -1,0 +1,13 @@
+/root/Documents/Dev/ProgrammingPractice/Rust/hello-rocket/target/debug/deps/indexmap-fea875ece05b9cac.rmeta: /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/lib.rs /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/macros.rs /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/equivalent.rs /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/mutable_keys.rs /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/util.rs /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/map.rs /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/set.rs
+
+/root/Documents/Dev/ProgrammingPractice/Rust/hello-rocket/target/debug/deps/libindexmap-fea875ece05b9cac.rlib: /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/lib.rs /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/macros.rs /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/equivalent.rs /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/mutable_keys.rs /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/util.rs /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/map.rs /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/set.rs
+
+/root/Documents/Dev/ProgrammingPractice/Rust/hello-rocket/target/debug/deps/indexmap-fea875ece05b9cac.d: /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/lib.rs /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/macros.rs /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/equivalent.rs /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/mutable_keys.rs /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/util.rs /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/map.rs /root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/set.rs
+
+/root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/lib.rs:
+/root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/macros.rs:
+/root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/equivalent.rs:
+/root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/mutable_keys.rs:
+/root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/util.rs:
+/root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/map.rs:
+/root/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.3.2/src/set.rs:
