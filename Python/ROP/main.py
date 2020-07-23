@@ -1,38 +1,31 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: iso-8859-15 -*-
+import sys
+import argparse
 import os.path
-from os import path
-import binascii
-from capstone import *
-from struct import *
 
+
+# read in an elf and display it in a hexdump format.
 def read_elf(filename):
-    if not path.exists(filename):
-        print "File does not exist"
-        return 0
+    with open(filename, "rb") as f:
+        n = 0 # counter 
+        b = f.read(16) # read 16 bytes at a time. 
 
-    with open(filename, 'rb') as infile:
-        data = ""
-        while True:
-            data_in = infile.read(1024)
-            if not data_in:
-                break # we have reached the end...
-            data += data_in
-        print "done reading..."
-        return data
+        while b:
+            s1 = " ".join([f"{i:02x}" for i in b])
+            s1 = s1[0:23] + " " + s1[23:]
+            width = 48
 
-def parse(data):
-#    md = Cs(CS_ARCH_X86, CS_MODE_64)
-#    print "parsing" 
-#    for i in md.disasm(data_hex, 0x0000):
-#        print("0x%x:\t%s\t%s" %(i.address, i.mnemonic, i.op_str))
+            s2 = "".join([chr(i) if 32 <= i <= 127 else "." for i in b])
+
+            print(f"{n * 16:08x}   {s1:<{width}}  |{s2}|")
+
+            n += 1
+            b = f.read(16)
+
 
 
 if __name__ == "__main__":
-    filename = raw_input("What file would you like to open: ")
-    data = read_elf(filename)
-    if len(data) > 0:
-        print "Data length returned is: %i " % len(data)
-        parse(data)
-    else:
-        print "File has no data found" 
+    #main
+    filename = "ret2win"
+    read_elf(filename)
