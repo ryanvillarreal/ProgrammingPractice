@@ -1,25 +1,63 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+import requests, sys, os, json, ftplib,argparse, requests
+from termcolor import colored, cprint
+from shodan import Shodan
 
-import requests, sys, os, json, ftplib, shodan, argparse
-from termcolor import colored
+scanned = []
+
+def read_in_scanned():
+    # should use a hardcoded filename - for ease of use. 
+    with open('./scanned.txt') as f:
+        lines = f.read().splitlines()
+
+    for line in lines: 
+        scanned.append(line)
+    cprint ("We read in %i line(s)" % len(lines), 'green')
+
+def write_out_scanned(ip):
+    try:
+        f = open("./scanned.txt", "a")
+        f.write(ip + "\n")
+        f.close()
+    except Exception as e:
+        print ("Error %s" % e)
+
 
 def shodan_search():
-    # rolled the api key - for anyone scraping this is a false positive key
-    API_KEY = 'JgWgPNH5N7E66wZof1KXKy5sZqceOqbW'
-    try:
-        # Setup the api
-        api = shodan.Shodan(API_KEY)
+    page = 0
+    API_KEY = '<insert API Key here>'
+    cprint ("Grabbing the first page", 'red')
 
-        # Perform the search
-        query = ' '.join('port 21')
-        result = api.search(query)
+    while True:
+        try:
+            # Setup the api
+            api = Shodan(API_KEY)
+            page += 1
+             # Perform the search
+            query = ' '.join('port 21')
+            result = api.search(query, page)
 
-        # Loop through the matches and check each one for open directories
-        print("total results: %i" % len(result['matches']))
-        for service in result['matches']:
-            connect_ftp(service['ip_str'])
-    except Exception as e:
-        print('Error: %s' % e)
+             # Loop through the matches and check each one for open directories
+            print("total results on page %i: %i" % (len(result['matches']), page))
+
+            for service in result['matches']:
+                ip = service['ip_str']
+                # try the FTP login
+                if ip not in scanned:
+                    connect_ftp(ip)
+
+            # get the next page
+            cprint ("Grabbing the next page", 'red')
+
+        except Exception as e:
+            # need to figure out how to differinate between timeout and no more page errors
+            if e == "The search request timed out.":
+                cprint("Error: %s" % e)
+            else:
+                cprint("Error: %s" % e)
+                cprint("Exiting", 'red')
+                #sys.exit() 
+
 
 def check_ip():
     session = requests.session()
@@ -27,36 +65,37 @@ def check_ip():
     r = session.get("http://httpbin.org/ip")
     print(r.text)
 
+
 def connect_ftp(ip):
-    # setup the tor node if proxy is required
-    #tor_node = FTP('')
-    #tor_node.login('anonymous@'+ip,'@anonymous')
-    #tor_node.retrlines('LIST')
+    # show the list of already scanned items for debugging
+    if len(scanned) % 10 == 0:
+        print ("Already tested %i hosts" % len(scanned), 'yellow')
 
-    # if the argument is set to use tor send to the localhost:9050 instead of the address
-    if args.tor:
-        print("Use Tor")
-
-    # try the FTP Login
+    # if new IP test it 
     try:
-        print("trying host: %s" % ip)
+        print("Trying host: %s" % ip)
         ftp = ftplib.FTP(ip, timeout=2)
+        # add scanned IP to list for quick checking, and to scanned.txt for on disk checking
+        write_out_scanned(ip)
+        scanned.append(ip)
     except ftplib.all_errors as e:
-        print("Could not connect...skipping this host")
+        #print ("Couldn't not connect...skipping host")
+        write_out_scanned(ip)
+        scanned.append(ip)
         return 0
-    
-    # now try to login to the FTP client
-    print("trying to login to %s" % ip)
+
+    print("Connected... attempting to login to %s " % ip)
     try:
         ftp.login()
     except ftplib.all_errors as e:
         print("could not login")
         return 0
 
-    print colored('Logged in...dumping directory', 'green')
+    cprint ('Logged in...dumping directory', 'green')
     try:
         list_contents = ftp.retrlines('LIST')
         f = open('test.txt','a+')
+        f.write("Found dir on %s \n" % ip)
         for line in list_contents:
             f.write(line)
             f.close
@@ -64,36 +103,6 @@ def connect_ftp(ip):
         print(e)
         return 0
 
-def masscan_search():
-    data = {}
-    for file in os.listdir("./"):
-        if file.endswith(".json"):
-            with open(file) as json_file:
-                data = json.load(json_file)
-    # should have loaded all the data here.          
-    if not data:
-        print("No data loaded...try running masscan or using Shodan")
-        sys.exit(0)
-    for ip in data:
-        #print(ip['ip'])
-        connect_ftp(ip['ip'])
-
-
-
 if __name__ == "__main__":
-    print("main")
-    #get_ip()
-    #read_json()
-    parser = argparse.ArgumentParser(prog='scan.py')
-
-    # setup argument flags
-    generalGroup = parser.add_argument_group('General Options')
-    generalGroup.add_argument('-t', '--tor', help='Pipe data through tor', action='store_true', default=False)
-    generalGroup.add_argument('-S', '--Shodan', help='Run the shodan function', action='store_const', dest='shodan_search')
-    generalGroup.add_argument('-M', '--Masscan', help='Run the masscan function', action='store_const', dest='masscan_search')
-
-    # parse argument
-    args = parser.parse_args()
-
-    # choose between Shodan and masscan here
-    read_json()
+    read_in_scanned()
+    shodan_search()
